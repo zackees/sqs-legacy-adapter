@@ -2,13 +2,19 @@
 
 `sqs-legacy-adapter` is a wrapper for the AWS SQS API using the `@aws-sdk/client-sqs` package. It provides a simplified interface for common SQS operations, making it easier to interact with AWS SQS.
 
+## Installation
+
 To install the package, use npm:
 
 ```sh
 npm install sqs-legacy-adapter
 ```
 
-```js
+## Usage
+
+Here's a basic example of how to use the `sqs-legacy-adapter`:
+
+```javascript
 const SQSAdapter = require('sqs-legacy-adapter');
 
 (async () => {
@@ -43,6 +49,8 @@ const SQSAdapter = require('sqs-legacy-adapter');
 })();
 ```
 
+## API
+
 The `SQSAdapter` class provides the following methods:
 
 - `listQueues()`: Lists all queues in your AWS account. Returns a promise that resolves to an array of queue URLs.
@@ -51,3 +59,7 @@ The `SQSAdapter` class provides the following methods:
 - `receiveMessage(queueUrl)`: Receives messages from the specified queue. Returns a promise that resolves to an array of messages.
 - `deleteMessage(queueUrl, receiptHandle)`: Deletes a message from the specified queue. Returns a promise that resolves when the message is deleted.
 - `deleteQueue(queueUrl)`: Deletes the specified queue. Returns a promise that resolves when the queue is deleted.
+
+## License
+
+This project is licensed under the ISC License.
