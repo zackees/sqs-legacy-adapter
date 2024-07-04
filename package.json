@@ -1,0 +1,24 @@
+{
+  "name": "sqs-legacy-adapter",
+  "version": "1.0.1",
+  "description": "Wraps the sqs portion of npm package \"aws-sdk\" using \"@aws-sdk/client-sqs\" on the backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zackees/sqs-legacy-adapter.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zackees/sqs-legacy-adapter/issues"
+  },
+  "homepage": "https://github.com/zackees/sqs-legacy-adapter#readme",
+  "dependencies": {
+    "@aws-sdk/client-sqs": "^3.609.0"
+  },
+  "readme": "README.md"
+}
