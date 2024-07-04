@@ -1,6 +1,6 @@
 {
   "name": "sqs-legacy-adapter",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Wraps the sqs portion of npm package \"aws-sdk\" using \"@aws-sdk/client-sqs\" on the backend",
   "main": "index.js",
   "scripts": {
