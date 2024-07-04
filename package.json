@@ -1,6 +1,6 @@
 {
   "name": "sqs-legacy-adapter",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Wraps the sqs portion of npm package \"aws-sdk\" using \"@aws-sdk/client-sqs\" on the backend",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/zackees/sqs-legacy-adapter.git"
   },
-  "keywords": [],
+  "keywords": ["amazon", "aws", "sqs", "legacy", "adapter", "adaptor", "wrapper", "bridge"],
   "author": "",
   "license": "ISC",
   "bugs": {
