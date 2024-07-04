@@ -104,5 +104,7 @@ SQSAdapter.SQS = class {
 };
 
 module.exports = {
+    Endpoint: SQSAdapter.Endpoint,
+    SQS: SQSAdapter.SQS,
     default: SQSAdapter
 };
