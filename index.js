@@ -8,8 +8,8 @@ class SQSAdapter {
             ...options
         };
 
-        if (options.endpointUrl) {
-            clientParams.endpoint = options.endpointUrl;
+        if (options.endpoint) {
+            clientParams.endpoint = options.endpoint;
         }
 
         this.client = new SQSClient(clientParams);
