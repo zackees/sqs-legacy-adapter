@@ -19,6 +19,7 @@ npm install sqs-legacy-adapter
 Here's a basic example of how to use the `sqs-legacy-adapter`:
 
 ```javascript
+// const AWS = require('aws-sdk');  // this is replaced by sqs-legacy-adapter
 const AWS = require('sqs-legacy-adapter');
 const dotenv = require('dotenv');
 
