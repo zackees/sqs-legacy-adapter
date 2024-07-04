@@ -15,50 +15,56 @@ npm install sqs-legacy-adapter
 Here's a basic example of how to use the `sqs-legacy-adapter`:
 
 ```javascript
-const SQSAdapter = require('sqs-legacy-adapter');
+const AWS = require('sqs-legacy-adapter');
+const dotenv = require('dotenv');
 
-(async () => {
-    const sqsAdapter = new SQSAdapter('us-east-1');
+dotenv.config();
+
+async function runSqsTest() {
+    const sqs = new AWS.SQS({
+        apiVersion: '2012-11-05',
+        region: 'us-east-1',
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        endpoint: new AWS.Endpoint('http://localhost'),
+    });
+
+    const queueName = 'my-test-queue';
+    const [queueUrl, queueCreated] = await createOrGetQueue(sqs, queueName);
+
+    await sqs.sendMessage({ QueueUrl: queueUrl, MessageBody: 'hello world' }).promise();
     
-    // Create a new queue
-    const queueUrl = await sqsAdapter.createQueue('MyTestQueue');
-    console.log('Queue created:', queueUrl);
-
-    // List queues
-    const queues = await sqsAdapter.listQueues();
-    console.log('Queues:', queues);
-
-    // Send a message
-    const messageId = await sqsAdapter.sendMessage(queueUrl, 'Hello, world!');
-    console.log('Message sent:', messageId);
-
-    // Receive a message
-    const messages = await sqsAdapter.receiveMessage(queueUrl);
-    console.log('Messages received:', messages);
-
-    // Delete a message
-    if (messages.length > 0) {
-        const receiptHandle = messages[0].ReceiptHandle;
-        await sqsAdapter.deleteMessage(queueUrl, receiptHandle);
-        console.log('Message deleted');
+    const receiveResponse = await sqs.receiveMessage({ QueueUrl: queueUrl, MaxNumberOfMessages: 1 }).promise();
+    if (receiveResponse.Messages && receiveResponse.Messages.length > 0) {
+        const message = receiveResponse.Messages[0];
+        await sqs.deleteMessage({ QueueUrl: queueUrl, ReceiptHandle: message.ReceiptHandle }).promise();
     }
 
-    // Delete the queue
-    await sqsAdapter.deleteQueue(queueUrl);
-    console.log('Queue deleted');
-})();
+    await sqs.deleteQueue({ QueueUrl: queueUrl }).promise();
+}
+
+runSqsTest().catch(console.error);
 ```
+
+## Environment Variables
+
+The following environment variables are required:
+
+- `AWS_ACCESS_KEY_ID`: Your AWS access key ID
+- `AWS_SECRET_ACCESS_KEY`: Your AWS secret access key
 
 ## API
 
-The `SQSAdapter` class provides the following methods:
+The `AWS.SQS` class provides the following methods:
 
-- `listQueues()`: Lists all queues in your AWS account. Returns a promise that resolves to an array of queue URLs.
-- `createQueue(queueName)`: Creates a new SQS queue with the specified name. Returns a promise that resolves to the URL of the created queue.
-- `sendMessage(queueUrl, messageBody)`: Sends a message to the specified queue. Returns a promise that resolves to the ID of the sent message.
-- `receiveMessage(queueUrl)`: Receives messages from the specified queue. Returns a promise that resolves to an array of messages.
-- `deleteMessage(queueUrl, receiptHandle)`: Deletes a message from the specified queue. Returns a promise that resolves when the message is deleted.
-- `deleteQueue(queueUrl)`: Deletes the specified queue. Returns a promise that resolves when the queue is deleted.
+- `listQueues(params)`: Lists queues. Returns a promise that resolves to an object containing QueueUrls.
+- `createQueue(params)`: Creates a new SQS queue. Returns a promise that resolves to an object containing the QueueUrl.
+- `sendMessage(params)`: Sends a message to a specified queue. Returns a promise that resolves to an object containing the MessageId.
+- `receiveMessage(params)`: Receives messages from a specified queue. Returns a promise that resolves to an object containing Messages.
+- `deleteMessage(params)`: Deletes a specified message from a specified queue. Returns a promise that resolves when the message is deleted.
+- `deleteQueue(params)`: Deletes the specified queue. Returns a promise that resolves when the queue is deleted.
+
+All methods return objects with a `promise()` method for use with async/await.
 
 ## License
 
