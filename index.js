@@ -28,10 +28,14 @@ SQSAdapter.SQS = class {
         this.client = new SQSClient(clientParams);
     }
 
-    async listQueues() {
-        const command = new ListQueuesCommand({});
+    async listQueues(options = {}) {
+        const params = {};
+        if (options.QueueNamePrefix) {
+            params.QueueNamePrefix = options.QueueNamePrefix;
+        }
+        const command = new ListQueuesCommand(params);
         const response = await this.client.send(command);
-        return response.QueueUrls;
+        return response.QueueUrls || [];
     }
 
     async createQueue(queueName) {
