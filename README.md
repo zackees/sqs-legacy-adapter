@@ -2,6 +2,10 @@
 
 `sqs-legacy-adapter` is a wrapper for the AWS SQS API using the `@aws-sdk/client-sqs` package. It provides a simplified interface for common SQS operations, making it easier to interact with AWS SQS.
 
+This is in a beta state and very few methods are implemented. If you are using a dead simple access pattern then this package may work for you.
+
+However this is package is so simple that you should be able to modify it easily for your needs. Pull requests welcome.
+
 ## Installation
 
 To install the package, use npm:
