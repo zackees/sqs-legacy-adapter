@@ -34,17 +34,33 @@ async function runSqsTest() {
     });
 
     const queueName = 'my-test-queue';
-    const [queueUrl, queueCreated] = await createOrGetQueue(sqs, queueName);
+    let queueUrl;
+
+    // Check if the queue already exists
+    const listQueuesResponse = await sqs.listQueues({ QueueNamePrefix: queueName }).promise();
+    if (listQueuesResponse.QueueUrls && listQueuesResponse.QueueUrls.length > 0) {
+        queueUrl = listQueuesResponse.QueueUrls[0];
+        console.log(`Queue already exists: ${queueUrl}`);
+    } else {
+        // If the queue doesn't exist, create it
+        const createQueueResponse = await sqs.createQueue({ QueueName: queueName }).promise();
+        queueUrl = createQueueResponse.QueueUrl;
+        console.log(`Queue created: ${queueUrl}`);
+    }
 
     await sqs.sendMessage({ QueueUrl: queueUrl, MessageBody: 'hello world' }).promise();
-    
+    console.log('Message sent');
+
     const receiveResponse = await sqs.receiveMessage({ QueueUrl: queueUrl, MaxNumberOfMessages: 1 }).promise();
     if (receiveResponse.Messages && receiveResponse.Messages.length > 0) {
         const message = receiveResponse.Messages[0];
+        console.log('Received message:', message.Body);
         await sqs.deleteMessage({ QueueUrl: queueUrl, ReceiptHandle: message.ReceiptHandle }).promise();
+        console.log('Message deleted');
     }
 
     await sqs.deleteQueue({ QueueUrl: queueUrl }).promise();
+    console.log('Queue deleted');
 }
 
 runSqsTest().catch(console.error);
