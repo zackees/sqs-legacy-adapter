@@ -2,6 +2,10 @@
 const { SQSClient, ListQueuesCommand, CreateQueueCommand, SendMessageCommand, ReceiveMessageCommand, DeleteMessageCommand, DeleteQueueCommand } = require('@aws-sdk/client-sqs');
 
 class SQSAdapter {
+    static Endpoint(endpointUrl) {
+        return endpointUrl;
+    }
+
     constructor(region, options = {}) {
         const clientParams = {
             region,
