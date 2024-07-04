@@ -2,6 +2,19 @@
 const { SQSClient, ListQueuesCommand, CreateQueueCommand, SendMessageCommand, ReceiveMessageCommand, DeleteMessageCommand, DeleteQueueCommand } = require('@aws-sdk/client-sqs');
 
 class SQSAdapter {
+}
+
+SQSAdapter.Endpoint = class {
+    constructor(endpointUrl) {
+        this.endpointUrl = endpointUrl;
+    }
+
+    toString() {
+        return this.endpointUrl;
+    }
+};
+
+SQSAdapter.SQS = class {
     constructor(region, options = {}) {
         const clientParams = {
             region,
@@ -68,21 +81,8 @@ class SQSAdapter {
         const response = await this.client.send(command);
         return response;
     }
-}
-
-SQSAdapter.Endpoint = class {
-    constructor(endpointUrl) {
-        this.endpointUrl = endpointUrl;
-    }
-
-    toString() {
-        return this.endpointUrl;
-    }
 };
 
 module.exports = {
-    SQSAdapter,
-    SQLAdapter: SQSAdapter, // Alias for SQSAdapter
-    Endpoint: SQSAdapter.Endpoint,
     default: SQSAdapter
 };
