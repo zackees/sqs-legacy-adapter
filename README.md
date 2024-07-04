@@ -1,10 +1,16 @@
 # sqs-legacy-adapter
 
-`sqs-legacy-adapter` is a wrapper for the AWS SQS API using the `@aws-sdk/client-sqs` package. It provides a simplified interface for common SQS operations, making it easier to interact with AWS SQS.
+`sqs-legacy-adapter` is a drop in replacement for `aws-sdk` which delegates to the `@aws-sdk/client-sqs` package on the backend.
 
-This is in a beta state and very few methods are implemented. If you are using a dead simple access pattern then this package may work for you.
+This allows users to migrate to `@aws-sdk/client-sqs` while still keeping the `aws-sdk` interface for SQS access.
 
-However this is package is so simple that you should be able to modify it easily for your needs. Pull requests welcome.
+This is in a beta state and few methods are implemented. If you are using a dead simple access pattern then this package may work for you.
+
+**What's Missing**
+
+Most of the exotic options that you would pass on to `AWS.SQS({...})` are simply ignored. Basic stuff like `region`, `secretAccessKey`, `accessKeyId`, `endpoint` is implemented and tested.
+
+Pull requests welcome.
 
 ## Installation
 
@@ -27,7 +33,7 @@ dotenv.config();
 
 async function runSqsTest() {
     const sqs = new AWS.SQS({
-        apiVersion: '2012-11-05',
+        apiVersion: '2012-11-05',  // Ignored right now
         region: 'us-east-1',
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -67,13 +73,6 @@ async function runSqsTest() {
 runSqsTest().catch(console.error);
 ```
 
-## Environment Variables
-
-The following environment variables are required:
-
-- `AWS_ACCESS_KEY_ID`: Your AWS access key ID
-- `AWS_SECRET_ACCESS_KEY`: Your AWS secret access key
-
 ## API
 
 The `AWS.SQS` class provides the following methods:
@@ -89,4 +88,9 @@ All methods return objects with a `promise()` method for use with async/await.
 
 ## License
 
-This project is licensed under the ISC License.
+This project is licensed under the Apache License.
+
+
+## Release Notes
+
+  * 1.1.4 - Updated readme
